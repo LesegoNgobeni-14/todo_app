@@ -3,8 +3,22 @@ import type { Task } from "@/lib/types";
 import TaskFormSection from "@/components/TaskFormSection";
 import Link from "next/link";
 
-export default function Home() {
-  const tasks = db.prepare("SELECT * FROM tasks WHERE archived_at IS NULL ORDER BY created_at DESC").all() as Task[];
+const VALID_SORTS = ["topic", "status", "due_date"] as const;
+type SortKey = (typeof VALID_SORTS)[number];
+
+function isValidSort(value: string | undefined): value is SortKey {
+  return VALID_SORTS.includes(value as SortKey);
+}
+
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Promise<{ sort?: string }>;
+}) {
+  const { sort } = await searchParams;
+  const sortKey: SortKey = isValidSort(sort) ? sort : "topic";
+
+  const tasks = db.prepare(`SELECT * FROM tasks WHERE archived_at IS NULL ORDER BY ${sortKey} ASC`).all() as Task[];
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-8">
@@ -16,17 +30,21 @@ export default function Home() {
 
       <div className="mb-4 flex gap-3 text-slate-600">
         <span>Sort by:</span>
-        <button className="underline">Topic</button>
-        <button className="underline">Status</button>
-        <button className="underline">Due date</button>
+        <Link
+          href="/?sort=topic"
+          className={`underline ${sortKey === "topic" ? "font-bold text-pink-500" : ""}`}>Topic</Link>
+        <Link
+          href="/?sort=status"
+          className={`underline ${sortKey === "status" ? "font-bold text-pink-500" : ""}`}>Status</Link>
+        <Link
+          href="/?sort=due_date"
+          className={`underline ${sortKey === "due_date" ? "font-bold text-pink-500" : ""}`}>Due date</Link>
       </div>
 
       <ul className="space-y-3">
         {tasks.length === 0 && (
           <li className="rounded-lg border border-slate-300 bg-white p-4 shadow-sm">
-            <p className="text-sm text-slate-400">
-              No tasks created yet
-            </p>
+            <p className="text-sm text-slate-400">No tasks created yet</p>
           </li>
         )}
         {tasks.map((task) => (
