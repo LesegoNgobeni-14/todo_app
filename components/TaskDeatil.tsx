@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { isOverdue } from "@/lib/overdue";
 import type { Task } from "@/lib/types";
 import TaskEditForm from "./TaskEditForm";
 
@@ -34,9 +34,14 @@ export default function TaskDetail({ task }: { task: Task }) {
     <div className="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold text-black">{task.title}</h1>
-        <span className="rounded-full bg-slate-100 px-3 py-1 text-xs text-red-500">
-          {task.status}
-        </span>
+        <div className="flex items-center gap-2">
+          {isOverdue(task) && (
+            <span className="rounded-full bg-red-100 px-3 py-1 text-xs text-red-500">Overdue</span>
+          )}
+          <span className="rounded-full bg-slate-100 px-3 py-1 text-xs text-red-500">
+            {task.status}
+          </span>
+        </div>
       </div>
 
       {task.description && (

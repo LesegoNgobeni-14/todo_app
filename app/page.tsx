@@ -2,6 +2,7 @@ import { db } from "@/lib/db";
 import type { Task } from "@/lib/types";
 import TaskFormSection from "@/components/TaskFormSection";
 import Link from "next/link";
+import { isOverdue } from "@/lib/overdue";
 
 const VALID_SORTS = ["topic", "status", "due_date"] as const;
 type SortKey = (typeof VALID_SORTS)[number];
@@ -55,7 +56,12 @@ export default async function Home({
 
               <div className="flex items-center justify-between">
                 <h2 className="font-medium text-black">{task.title}</h2>
-                <span className="rounded-full bg-slate-100 px-3 py-1 text-xs text-red-500">{task.status}</span>
+                <div className="flex items-center gap-2">
+                  {isOverdue(task) && (
+                    <span className="rounded-full bg-red-100 px-3 py-1 text-xs text-red-500">Overdue</span>
+                  )}
+                  <span className="rounded-full bg-slate-100 px-3 py-1 text-xs text-red-500">{task.status}</span>
+                </div>
               </div>
 
               {task.description && (
