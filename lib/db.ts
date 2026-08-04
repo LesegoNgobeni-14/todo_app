@@ -21,7 +21,7 @@ db.exec(`
     due_date    TEXT NOT NULL,
     topic       TEXT NOT NULL,
     status      TEXT NOT NULL CHECK (status IN ('Todo', 'In Progress', 'Complete')) DEFAULT 'Todo',
-    archived    INTEGER NOT NULL DEFAULT 0,
+    archived_at TEXT,
     created_at  TEXT NOT NULL DEFAULT (datetime('now'))
   );
 `);

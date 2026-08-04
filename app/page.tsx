@@ -4,7 +4,7 @@ import TaskFormSection from "@/components/TaskFormSection";
 import Link from "next/link";
 
 export default function Home() {
-  const tasks = db.prepare("SELECT * FROM tasks ORDER BY created_at DESC").all() as Task[];
+  const tasks = db.prepare("SELECT * FROM tasks WHERE archived_at IS NULL ORDER BY created_at DESC").all() as Task[];
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-8">
