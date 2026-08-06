@@ -2,7 +2,7 @@
 
 ## Requirements
 
-- Node.js **v24.14.0**
+- Node.js **v22.23.2**
 - npm (bundled with Node.js)
 
 ## Install
