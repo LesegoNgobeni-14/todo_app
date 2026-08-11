@@ -34,3 +34,4 @@ npm test
 - [Third-Party Code](docs/third-party-code.md)
 - [Database Design](docs/database-design.md)
 - [Running It](docs/running-it.md)
+- [AI-Usage-Transcripts](docs/ai-usage.pdf)
